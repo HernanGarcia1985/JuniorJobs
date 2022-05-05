@@ -1,35 +1,43 @@
 const db = require('../database/models');
-const Experience = require('../database/models/Experience')
+
 
 const experienceController = {
-    index: (req, res) => {
-        db.Experience.findAll()
-        .then((experience) => {
-            console.log(experience)
-            if(experience) {
-                res.json(experience)
-            }else {
-                res.json({message: "no existen experiences"})
-            }
-        })
-    },
-
-
-    
     show: (req, res) => {
-        const id = req.params.id;
-        db.Experience.findOne({where:{id: id}})
-        .then((experience) => {
-            if(experience){
-                console.log(experience)
-                res.json(experience)
-            } else {
-                res.json({message: "no existe el experience buscado"})
-            }
-        })
+        //res.json("Metodo para mostrar Education por el ID");
+        db.Experience.findByPk(req.params.id)
+            .then((experience) => {
+                if(experience) {
+                    console.log(experience);
+                    return res.status(200).json(experience.dataValues);
+                }
+                else {
+                    console.log('No se encontró el experience en nuestra base de datos');
+                    return res.status(404).json({message: 'No se encontró el experience en nuestra base de datos'});
+                }
+            })
+            .catch(function(error){
+                console.log(`Se ha producido el siguiente error: `, error);
+            })
     },
+    
+    index: (req, res) => {
+        //res.json("Metodo para mostrar todos los educations");
 
-
+        db.Experience.findAll()
+            .then((allExperiences) => {
+                if(allExperiences) {
+                    console.log(allExperiences);
+                    return res.status(200).json(allExperiences);
+                }
+                else {
+                    console.log('No se encontró experiences en nuestra base de datos');
+                    return res.status(404).json({message: 'No se encontró experiences en nuestra base de datos'});
+                }
+            })
+            .catch(function(error){
+                console.log(`Se ha producido el siguiente error: `, error);
+            })
+    }
 }
 
 module.exports = experienceController
