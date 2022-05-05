@@ -1,34 +1,41 @@
 const db = require('../database/models');
-const Speciality = require('../database/models/Speciality')
 
 const specialityController = {
-    index: (req, res) => {
-        db.Speciality.findAll()
-        .then((speciality) => {
-            console.log(speciality)
-            if(speciality) {
-                res.json(speciality)
-            }else {
-                res.json({message: "no existen specialities"})
-            }
-        })
-    },
-
-
     show: (req, res) => {
-        const id = req.params.id;
-        db.Speciality.findOne({where:{id: id}})
-        .then((speciality) => {
-            if(speciality){
-                console.log(speciality)
-                res.json(speciality)
-            } else {
-                res.json({message: "no existe el speciality buscado"})
-            }
-        })
+        //res.json("Metodo para mostrar Education por el ID");
+        db.Speciality.findByPk(req.params.id)
+            .then((speciality) => {
+                if(speciality) {
+                    console.log(speciality);
+                    return res.status(200).json(speciality.dataValues);
+                }
+                else {
+                    console.log('No se encontró el speciality en nuestra base de datos');
+                    return res.status(404).json({message: 'No se encontró el speciality en nuestra base de datos'});
+                }
+            })
+            .catch(function(error){
+                console.log(`Se ha producido el siguiente error: `, error);
+            })
     },
-
-
+    
+    index: (req, res) => {
+        //res.json("Metodo para mostrar todos los educations");
+        db.Speciality.findAll()
+            .then((allSpecialities) => {
+                if(allSpecialities) {
+                    console.log(allSpecialities);
+                    return res.status(200).json(allSpecialities);
+                }
+                else {
+                    console.log('No se encontró specialities en nuestra base de datos');
+                    return res.status(404).json({message: 'No se encontró specialities en nuestra base de datos'});
+                }
+            })
+            .catch(function(error){
+                console.log(`Se ha producido el siguiente error: `, error);
+            })
+    }
 }
 
 module.exports = specialityController
