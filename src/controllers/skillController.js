@@ -1,5 +1,4 @@
 const db = require('../database/models');
-const Skill = require('../database/models/Skill')
 
 const skillController = {
 
@@ -30,12 +29,30 @@ const skillController = {
         })
     },
 
+    show: (req, res) => {
+        //res.json("Metodo para mostrar Skill por el ID");
+        db.Skill.findByPk(req.params.id)
+            .then((skill) => {
+                if(skill) {
+                    console.log(skill);
+                    return res.status(200).json(skill.dataValues);
+                }
+                else {
+                    console.log('No se encontró el skill en nuestra base de datos');
+                    return res.status(404).json({message: 'No se encontró el skill en nuestra base de datos'});
+                }
+            })
+            .catch(function(error){
+                console.log(`Se ha producido el siguiente error: `, error);
+            })
+    },
+
     index: (req, res) => {
         db.Skill.findAll()
-        .then((skill) => {
-            if(skill) {
-                console.log(skill)
-                return res.status(200).json(skill)
+        .then((allSkills) => {
+            if(allSkills) {
+                console.log(allSkills)
+                return res.status(200).json(allSkills)
             }else {
                 console.log('No se encontró ningún skill en nuestra base de datos');
                 return res.status(404).json({message: 'No se encontró ningún skill en nuestra base de datos'});
@@ -44,17 +61,7 @@ const skillController = {
         .catch((error) => {
             console.log(`Se ha producido el siguiente error: `, error);
         })
-    },
-
-    show: (req, res) => {
-        const id = req.params.id
-        db.Skill.findOne({where:{id: id}})
-        .then((skill) => {
-            console.log(skill)
-            return res.status(200).json(skill)
-        })
     }
-
 }
 
 module.exports = skillController
