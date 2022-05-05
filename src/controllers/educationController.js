@@ -24,10 +24,10 @@ const educationController = {
         //res.json("Metodo para mostrar todos los educations");
 
         db.Education.findAll()
-            .then((alleducation) => {
-                if(alleducation) {
-                    console.log(alleducation);
-                    return res.status(200).json(alleducation);
+            .then((allEducation) => {
+                if(allEducation) {
+                    console.log(allEducation);
+                    return res.status(200).json(allEducation);
                 }
                 else {
                     console.log('No se encontró educations en nuestra base de datos');
