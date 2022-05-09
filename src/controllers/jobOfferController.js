@@ -84,6 +84,7 @@ const jobOfferController = {
                 })
                 .catch(function(error){
                     console.log("No se pudo crear el registro en nuestra base de datos", error);
+                    return res.status(400).json({message: 'No se pudo actualizar la oferta de trabajo'});
                 })
             }
             else {
